@@ -1,16 +1,33 @@
-import React, { useEffect, useRef, Component } from 'react'
+import React, { useEffect, useRef, Component, Fragment } from 'react'
 import { useListener } from "../hooks.jsx";
 import { InvalidElement, NoPopAndDef } from "../constant.jsx"
 import './index.css'
 
-// invalid
-export const modal_ = (children) => {
+// issue: container 优化 不重新渲染
+export const ModalCan = ({ container, hidden, children, ...funcs }) => {
     const ref = useRef()
+    useListener(ref.current, 'mousewheel', NoPopAndDef)
+    useListener(ref.current, 'touchmove', NoPopAndDef)
 
-    useListener(ref.current.current, 'click', NoPopAndDef)
-    useListener(ref.current.current, 'touchmove', NoPopAndDef)
-
-    return <div className="HOC_modal" ref={ref.current}>{children}</div>
+    // issue: 优先mount?HOC_modal
+    // if (hidden) {
+    //     return <Fragment />
+    if (!hidden) {
+        if (typeof container === 'function') {
+            // class
+            if (container.prototype.isReactComponent) {
+                return React.createElement(container, funcs, children)
+            } else {
+                // func, bug???
+                return React.cloneElement(container({ children, funcs }))
+            }
+        }
+        // object
+        else if (React.isValidElement(container)) {
+            return React.cloneElement(container, funcs, children)
+        }
+    }
+    return <div className="HOC_modal" ref={ref} style={{ display: hidden ? 'none' : 'flex' }}>{children}</div>
 }
 
 export const modalCan = (children) => {

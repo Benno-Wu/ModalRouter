@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react"
+import React, { Fragment, useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react"
 import { NotMatched } from "./constant.jsx";
 
 export const useUpdate = () => {
@@ -10,23 +10,18 @@ export const useListener = (element = window, event, handler, options = {}) => {
     let { current } = useRef()
     current = handler
     useEffect(() => {
-        if (!element.addEventListener) return;
-        element.addEventListener(event, handler, {
+        if (!element || !element.addEventListener) return;
+        const listener = e => current(e)
+        element.addEventListener(event, listener, {
             capture: !!options.capture,
             once: !!options.once,
             passive: !!options.passice,
         })
-        return element.removeEventListener(event, handlers, { capture: !!options.capture })
-    }, [element, event, ...options])
+        return () => element.removeEventListener(event, listener, { capture: !!options.capture })
+    }, [element, event, options.capture, options.once, options.passice])
 }
 
-export const useChildren = (children, funcs) => {
-    return React.Children.map(children, (c, i) => {
-        return React.isValidElement(c) && c.type !== 'string' ?
-            React.cloneElement(c, { ...funcs }) : c
-    })
-}
-
+// issue: necessery to useCallback?
 export const useModals = (map, multi) => {
     const { current: modalData } = useRef([])
     const { current: modals } = useRef([])
@@ -38,12 +33,11 @@ export const useModals = (map, multi) => {
             modalData.push(data)
         } else throw new ReferenceError(NotMatched)
     }, [map])
-    const openModal = useCallback((str, data) => {
-        open(str, data)
-    }, [map])
+    const openModal = useCallback((str, data) => open(str, data), [map])
 
     // multi? always splice or ?
     // single: always close all?
+    // issue: same key/double open cause unmatch
     const close = useCallback(multi ? (str) => {
         let index = modals.findIndex((v, i) => v === str)
         if (index !== -1) {
@@ -53,9 +47,7 @@ export const useModals = (map, multi) => {
             modals.pop()
             modalData.pop()
         }
-    } : () => {
-        closeAllModal()
-    }, [multi])
+    } : () => closeAllModal(), [multi])
     const closeModal = useCallback((str) => {
         close(str)
     }, [])
@@ -67,24 +59,15 @@ export const useModals = (map, multi) => {
     }, [])
 
     // 返回的是表达式还是函数？
-    const getModal = useCallback(multi ? () => {
-        return modals.map((str, i) => {
-            return getElement(map[str], modalData[i], str + i)
-            // let prop = { modalData: modalData[i], openModal, closeModal }
-            // if (typeof modalData[i] === 'object' && !modalData[i][Symbol.iterator]) {
-            //     prop = { ...prop, ...modalData[i] }
-            // }
-            // return (
-            //     React.isValidElement(map[str]) ?
-            //         React.createElement(map[str], { ...prop, key: str + i })
-            //         : React.cloneElement(map[str], { ...prop, key: str + i }))
-        })
-    } : () => {
-        return !modals.length ? null :
-            getElement(modals[modals.length - 1], modalData[modalData.length - 1])
-    }, [multi, map])
+    const getModal = useCallback(multi ? () =>
+        modals.map((str, i) =>
+            getElement(map[str], modalData[i], str + i)
+        ) : () => !modals.length ? null :
+            [getElement(map[modals.slice(-1)[0]], modalData.slice(-1)[0], modals.slice(-1)[0] + 0)]
+        , [multi, map])
 
     // bug?
+    // 自动展开object类型的data
     function getElement (ele, data, key) {
         let prop = { modalData: data, openModal, closeModal, closeAllModal }
         if (typeof data === 'object' && !data[Symbol.iterator]) {
@@ -92,8 +75,8 @@ export const useModals = (map, multi) => {
         }
         return (
             React.isValidElement(ele) ?
-                React.createElement(ele, { ...prop, key })
-                : React.cloneElement(ele, { ...prop, key }))
+                React.cloneElement(ele, { ...prop, key })
+                : React.createElement(ele, { ...prop, key }))
     }
 
     return [modals, modalData, { getModal, openModal, closeModal, closeAllModal }]
