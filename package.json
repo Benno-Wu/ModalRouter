@@ -1,8 +1,8 @@
 {
   "name": "modal-router",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "a simple way to toggle modals",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "webpack --config webpack.prod.config.js",
     "dev": "webpack-dev-server ---config webpack.dev.config.js"
@@ -17,6 +17,13 @@
     "README.md"
   ],
   "author": "BennoWu",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Benno-Wu/ModalRouter"
+  },
+  "bugs": {
+    "url": "https://github.com/Benno-Wu/ModalRouter/issues"
+  },
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.12.10",
@@ -34,5 +41,8 @@
   "peerDependencies": {
     "react": ">=16.9.0",
     "react-dom": ">=16.9.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   }
 }

@@ -1,5 +1,9 @@
 # Modal-Router
 
+## Install
+
+`npm i modal-router`
+
 ## Usage
 
 - ModalRouter: 始终只显示一个modal
