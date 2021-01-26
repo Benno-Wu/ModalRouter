@@ -5,7 +5,7 @@ const TerserPlugin = require('terser-webpack-plugin')
 // https://zhuanlan.zhihu.com/p/270649464
 
 module.exports = {
-    mode: 'production',
+    mode: 'development',
     entry: {
         index: './src/index.js',
     },
@@ -52,19 +52,6 @@ module.exports = {
         ]
     },
     optimization: {
-        minimize: true,
-        // https://github.com/terser/terser#compress-options
-        minimizer: [new TerserPlugin({
-            // no comments
-            terserOptions: {
-                format: {
-                    comments: false,
-                },
-                compress: {
-                    pure_funcs: ['console.log']
-                }
-            },
-            extractComments: false,
-        })],
+        minimize: false,
     }
 }

@@ -1,6 +1,6 @@
 {
   "name": "modal-router",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "a simple way to toggle modals",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,8 @@
     "Modal"
   ],
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "author": "BennoWu",
   "license": "MIT",
