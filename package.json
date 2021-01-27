@@ -1,11 +1,11 @@
 {
   "name": "modal-router",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "a simple way to toggle modals",
   "main": "dist/index.js",
   "scripts": {
     "build": "webpack --config webpack.prod.config.js",
-    "dev": "webpack-dev-server ---config webpack.dev.config.js"
+    "dev": "webpack --config webpack.dev.config.js"
   },
   "keywords": [
     "react",
