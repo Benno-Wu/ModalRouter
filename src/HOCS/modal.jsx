@@ -6,6 +6,7 @@ import './index.css'
 // issue: container 优化 不重新渲染
 export const ModalCan = ({ container, hidden, children, ...funcs }) => {
     const ref = useRef()
+    // bug?modal内容或者背景滚动
     useListener(ref.current, 'mousewheel', NoPopAndDef)
     useListener(ref.current, 'touchmove', NoPopAndDef)
 

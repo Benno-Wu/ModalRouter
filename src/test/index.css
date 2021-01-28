@@ -1,0 +1,47 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-color: gray;
+}
+.simpleEle {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  text-align: center;
+  color: black;
+}
+.modal {
+  border: greenyellow 3px solid;
+  border-radius: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: red;
+}
+.small {
+  width: 35%;
+  height: 35%;
+  text-align: center;
+  vertical-align: middle;
+  background-color: black;
+}
+.big {
+  width: 75%;
+  height: 75%;
+  text-align: center;
+  vertical-align: middle;
+  background-color: black;
+}
+.button {
+  width: 25%;
+  height: 50px;
+  margin: 3%;
+  border: black 3px solid;
+  border-radius: 5px;
+  color: blue;
+}

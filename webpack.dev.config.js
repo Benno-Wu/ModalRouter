@@ -1,34 +1,20 @@
 const path = require('path')
-const TerserPlugin = require('terser-webpack-plugin')
-
-// test: npm link
-// https://zhuanlan.zhihu.com/p/270649464
+const html = require('html-webpack-plugin')
 
 module.exports = {
     mode: 'development',
     entry: {
-        index: './src/index.js',
+        index: './src/test/index.jsx',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js',
         libraryTarget: 'umd',
     },
-    // bug
-    // https://caijialinxx.github.io/2019/11/20/fix-react-error-321-by-webpack-externals/
-    externals: {
-        react: {
-            commonjs: 'react',
-            commonjs2: 'react',
-            amd: 'react',
-            root: 'React',
-        },
-        'react-dom': {
-            commonjs: 'react-dom',
-            commonjs2: 'react-dom',
-            amd: 'react-dom',
-            root: 'ReactDOM',
-        },
+    devServer: {
+        contentBase: path.join(__dirname + 'dist'),
+        hot: true,
+        open: true,
     },
     module: {
         rules: [
@@ -51,6 +37,13 @@ module.exports = {
             },
         ]
     },
+    plugins: [
+        new html({
+            template: path.resolve(__dirname, './public/index.html'),
+            favicon: './public/favicon.ico',
+            hash: true,
+        })
+    ],
     optimization: {
         minimize: false,
     }
