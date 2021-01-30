@@ -6,15 +6,8 @@ import { useUpdate, useModals } from "./hooks.jsx";
 
 // todos：lifetime\callback
 
-export default function Single ({ children, map, contextMode, container, ...rest }) {
-    const update = useUpdate()
-    const [modals, modalData, { getModal, openModal: open, closeModal: close, closeAllModal: closeAll }] = useModals(map, false)
-
-    const openModal = useCallback(enhance(open, update), [])
-    const closeModal = useCallback(enhance(close, update), [])
-    const closeAllModal = useCallback(enhance(closeAll, update), [])
-    const funcs = { openModal, closeModal, closeAllModal }
-
+export default function Single ({ children, map, contextMode, container, locker, ...rest }) {
+    const [modals, modalData, { getModal, ...funcs }] = useModals(map, false, locker)
     const getChildren = enhanceChildren(children, funcs)
 
     return (

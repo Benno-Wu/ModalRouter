@@ -9,14 +9,43 @@
 - ModalRouter: 始终只显示一个modal
 - ModalRouter.Multi: 展示多个modal
 
-#### 内置toggle方法
+## Example
+
+```javascript
+import xx from './xx.jsx'
+
+const map={x:xx}
+
+<ModalRouter(.Multi) map={map} contextMode>
+    <div/>
+    <YourComponent/>
+</ModalRouter(.Multi)>
+
+//YourComponent
+props.(...toggle)
+
+const FuncTest = ({ children, ...rest }) => {
+    const { openModal, closeModal, closeAllModal } = useContext(AllModals)
+
+    //try to fire a timer to destroy this FC, make it looks like a Toast
+    useEffect(() => {
+        openModal('x')
+        return () => closeModal('x')
+    }, [])
+
+    return <span>FC Test</span>
+}
+```
+
+## 内置toggle方法
 
 - openModal(key,data)
 >map内key对应的组件会接收到modalData属性,如果data是个普通对象会自动展开
 - closeModal(key?)
+>如果key不提供或者未匹配，默认pop
 - closeAllModal()
 
-## 配置属性
+### 配置属性
 
 ### map: { key: modal }
 >key: 用于标识一个modal组件
@@ -28,10 +57,17 @@
 >
 >默认ModalRouter所有儿子组件的props会接收到所有toogle方法
 
-### container:
+### container: function/class or object of React.ReactElement
 >可传入自定义容器组件，记得处理props.children，以及接收并使用内置toggle方法
+>
+>考虑配合内置导出对象 ScrollLocker，作用如下
 
-__默认container css:__
+### locker: HTMLElement
+>暂且支持一个，用于解决scroll chain现象，阻止非Modal元素滚动
+>
+>默认为document.body
+
+默认 __container css:__
 ```css
 .HOC_modal {
   position: fixed;
