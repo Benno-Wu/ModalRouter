@@ -3,6 +3,7 @@ const html = require('html-webpack-plugin')
 
 module.exports = {
     mode: 'development',
+    devtool: 'cheap-module-source-map',
     entry: {
         index: './src/test/index.jsx',
     },

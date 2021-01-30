@@ -4,6 +4,11 @@
 }
 body {
   background-color: gray;
+  border: white 3px solid;
+}
+.simpleHead {
+  text-align: center;
+  color: black;
 }
 .simpleEle {
   position: absolute;
@@ -12,7 +17,7 @@ body {
   right: 0;
   margin: 0 auto;
   text-align: center;
-  color: black;
+  color: red;
 }
 .modal {
   border: greenyellow 3px solid;
@@ -36,6 +41,14 @@ body {
   text-align: center;
   vertical-align: middle;
   background-color: black;
+}
+.giant {
+  width: 75%;
+  height: 200vh;
+  text-align: center;
+  vertical-align: middle;
+  background-color: black;
+  overflow: scroll;
 }
 .button {
   width: 25%;
