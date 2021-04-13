@@ -8,6 +8,7 @@
 
 - ModalRouter: 始终只显示一个modal
 - ModalRouter.Multi: 展示多个modal
+- ScrollLocker: 用于锁定某滚动对象，全局公用一个存储池，由于dom元素即锁定对象唯一，在完全解锁前皆不可滚动
 
 ## Example
 

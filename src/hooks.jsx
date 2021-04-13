@@ -57,8 +57,13 @@ export const useModals = (map, multi, locker_) => {
     // single: always close all?
     // bug!!!!!
     // issue: same key/double open cause unmatch
+    /*
+    多个重复时，想自由处理，则key是必要的。
+    key简单处理则是由用户提供，
+    复杂处理可以为open时返回一个带标识的close闭包或者仅是标识
+    */
     const close = useCallback(multi ? (str) => {
-        let index = modals.findIndex((v, i) => v === str)
+        let index = modals.lastIndexOf(str)
         if (index !== -1) {
             modals.splice(index, 1)
             modalData.splice(index, 1)
@@ -85,14 +90,19 @@ export const useModals = (map, multi, locker_) => {
     // 返回的是表达式还是函数？
     const getModal = useCallback(multi ? () =>
         modals.map((str, i) =>
-            getElement(map[str], modalData[i], str + i)
+            // issue: warn
+            // todo: key better format: str+num, like a0,b0,a1,b2,b1...
+            // what's for: diff
+            // way to solve: modals is an Obj, like {str,key,data...}
+            // getElement(map[str], modalData[i], str + i)
+            getElement(map[str], modalData[i], str)
         ) : () => !modals.length ? null :
             [getElement(map[modals.slice(-1)[0]], modalData.slice(-1)[0], modals.slice(-1)[0] + 0)]
         , [multi, map])
 
     // bug?
     // 自动展开object类型的data
-    function getElement (ele, data, key) {
+    function getElement(ele, data, key) {
         let prop = { modalData: data, openModal, closeModal, closeAllModal }
         if (typeof data === 'object' && !data[Symbol.iterator]) {
             prop = { ...prop, ...data }
